@@ -8,8 +8,6 @@ import paddle
 import paddle.fluid as fluid
 import numpy
 import six
-
-
 # Configure the neural network.
 def net(x, y):
     y_predict = fluid.layers.fc(input=x, size=1, act=None)
@@ -28,6 +26,7 @@ def train(save_dirname):
     train_reader = paddle.batch(
         paddle.reader.shuffle(paddle.dataset.uci_housing.train(), buf_size=500),
         batch_size=20)
+    print(train_reader)
     place = fluid.CPUPlace()
     exe = fluid.Executor(place)
 
@@ -47,7 +46,7 @@ def train(save_dirname):
                         fluid.io.save_inference_model(
                             save_dirname, ['x'], [y_predict], exe)
                     return
-            print("Pass %d, total avg cost = %f" % (pass_id, total_loss_pass))
+            #print("Pass %d, total avg cost = %f" % (pass_id, total_loss_pass))
 
     train_loop(fluid.default_main_program())
 
@@ -69,8 +68,8 @@ def infer(save_dirname=None):
         results = exe.run(inference_program,
                           feed={feed_target_names[0]: numpy.array(test_feat)},
                           fetch_list=fetch_targets)
-        print("infer results: ", results[0])
-        print("ground truth: ", test_label)
+        # print("infer results: ", results[0])
+        # print("ground truth: ", test_label)
 
 
 # Run train and infer.

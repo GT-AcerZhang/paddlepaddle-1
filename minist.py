@@ -13,8 +13,6 @@ import numpy
 import paddle
 import paddle.fluid as fluid
 
-
-
 def softmax_regression():
     img = fluid.layers.data(name='img', shape=[1, 28, 28], dtype='float32')
     predict = fluid.layers.fc(
@@ -69,12 +67,12 @@ def optimizer_program():
     return fluid.optimizer.Adam(learning_rate=0.001)
 
 BATCH_SIZE = 64
+q = paddle.dataset.mnist.train()
 
 train_reader = paddle.batch(
         paddle.reader.shuffle(
             paddle.dataset.mnist.train(), buf_size=500),
         batch_size=BATCH_SIZE)
-
 test_reader = paddle.batch(
             paddle.dataset.mnist.test(), batch_size=BATCH_SIZE)
 
@@ -93,7 +91,7 @@ def event_handler(pass_id, batch_id, cost):
 #     cost_ploter.plot()
 
 
-use_cuda = True # set to True if training with GPU
+use_cuda = False # set to True if training with GPU
 place = fluid.CUDAPlace(0) if use_cuda else fluid.CPUPlace()
 
 prediction, [avg_loss, acc] = train_program()
