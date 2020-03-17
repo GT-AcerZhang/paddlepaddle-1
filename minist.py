@@ -129,7 +129,6 @@ exe.run(fluid.default_startup_program())
 
 main_program = fluid.default_main_program()
 test_program = fluid.default_main_program().clone(for_test=True)
-
 lists = []
 step = 0
 for epoch_id in epochs:
